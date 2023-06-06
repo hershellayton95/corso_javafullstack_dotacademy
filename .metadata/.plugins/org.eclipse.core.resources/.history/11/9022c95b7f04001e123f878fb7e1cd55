@@ -1,0 +1,7 @@
+package lessonPatterns;
+
+public class MySingleton {
+
+	public static int myNumber = 10;	
+	
+}

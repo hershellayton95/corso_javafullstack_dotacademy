@@ -1,0 +1,13 @@
+package lezione3.forme;
+
+public class Square extends Rectangle{
+
+
+	public Square(int x, int y, double lenght) {
+		super(x, y, lenght, lenght);
+	}
+
+
+	
+	
+}

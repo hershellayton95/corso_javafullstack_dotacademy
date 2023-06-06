@@ -1,0 +1,12 @@
+package lezione3.forme;
+
+public enum ShapesType {
+	
+	String qualcosa = null;
+	
+	CIRCLE,RECTANGLE,SQUARE,TRIANGLE;
+	
+	public String getQualcosa() {
+		return qualcosa;
+	};
+}

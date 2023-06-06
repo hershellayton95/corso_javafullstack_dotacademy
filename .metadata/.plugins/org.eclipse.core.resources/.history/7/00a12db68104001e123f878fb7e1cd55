@@ -1,0 +1,17 @@
+package lessonPatterns;
+
+public class MyApplicationMain {
+
+	public static void main(String[] args) {
+
+		System.out.println(MySingleton.myNumber);
+		
+		
+//		MySingleton mysingleton = new MySingleton();
+		MySingleton mysingleton = MySingleton.getInstance();
+		System.out.println(MySingleton.getInstance().getMyNumber());
+//		System.out.println(mysingleton.myNumber);
+//		System.out.println(mysingleton.getMyNumber());
+	}
+
+}

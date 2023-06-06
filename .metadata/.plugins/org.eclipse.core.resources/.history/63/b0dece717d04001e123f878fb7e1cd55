@@ -1,0 +1,9 @@
+package pattern;
+
+public class MyApplicationMain {
+
+	public static void main(String[] args) {
+		
+	}
+
+}

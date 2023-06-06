@@ -1,0 +1,9 @@
+package lezione3.forme;
+
+public enum ShapesType {
+
+	CIRCLE,
+	RECTANGLE,
+	SQUARE,
+	TRIANGLE
+}

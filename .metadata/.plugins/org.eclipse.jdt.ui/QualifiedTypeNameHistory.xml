@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.awt.Rectangle"/>
+    <fullyQualifiedTypeName name="lezione3.forme.Square"/>
+    <fullyQualifiedTypeName name="lezione3.forme.Triangle"/>
+    <fullyQualifiedTypeName name="lezione3.forme.Circle"/>
+    <fullyQualifiedTypeName name="lezione3.forme.Shape"/>
+    <fullyQualifiedTypeName name="lezione3.forme.Rectangle"/>
+    <fullyQualifiedTypeName name="java.lang.Override"/>
+</qualifiedTypeNameHistroy>

@@ -1,0 +1,25 @@
+package lezione3.forme;
+
+public enum ShapesType {
+	
+	CIRCLE("qualcosa1"),RECTANGLE("qualcosa2"),SQUARE("qualcosa3"),TRIANGLE("qualcosa4");
+	
+	private String qualcosa = null;
+	
+	private ShapesType(String qualcosa) {
+		this.qualcosa = qualcosa;
+	}
+	
+	public String getQualcosa() {
+		return qualcosa;
+	}
+
+	@Override
+	public String toString() {
+		return this.qualcosa;
+	};
+	
+	public boolean equalsTo(String type) {
+		this.qualcosa == type;
+	}
+}

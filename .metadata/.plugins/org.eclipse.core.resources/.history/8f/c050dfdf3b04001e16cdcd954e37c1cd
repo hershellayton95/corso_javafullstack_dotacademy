@@ -1,0 +1,82 @@
+package lezione3.forme;
+
+public class Rectangle {
+
+	private String x;
+	private String y;
+
+	private String base;
+	private String height;
+
+	private boolean isVisible=false;
+
+	public Rectangle(String x, String y, String base, String height, boolean isVisible) {
+		this.x = x;
+		this.y = y;
+		this.base = base;
+		this.height = height;
+		this.isVisible = isVisible;
+	}
+
+	public String getX() {
+		return x;
+	}
+
+	public void setX(String x) {
+		this.x = x;
+	}
+
+	public String getY() {
+		return y;
+	}
+
+	public void setY(String y) {
+		this.y = y;
+	}
+
+	public String getBase() {
+		return base;
+	}
+
+	public void setBase(String base) {
+		this.base = base;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
+	public void show() {
+		if(!isVisible) {
+			this.isVisible = true;
+			System.out.println("La figura è ora visibile");
+		}
+	}
+
+	public void hide() {
+		if(isVisible) {
+			this.isVisible = false;
+			System.out.println("La figura è ora nascosta");
+		}
+	}
+	
+	public void move() {
+		if(isVisible) {
+			this.isVisible = false;
+			System.out.println("La figura è ora nascosta");
+		}
+	}
+
+}

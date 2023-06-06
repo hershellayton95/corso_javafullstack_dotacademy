@@ -1,0 +1,42 @@
+package lezione3.forme;
+
+public interface IShape {
+	int x;
+	int y;
+
+	 boolean isVisible;
+
+	public int getX();
+
+	public void setX();
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
+	public abstract void show();
+
+	public abstract void hide();
+	
+	public void move(int x, int y) {
+		System.out.println(this);
+		this.hide();
+		setX(x);
+		setY(y);
+		this.show();
+		System.out.println(this);
+	}
+	
+}

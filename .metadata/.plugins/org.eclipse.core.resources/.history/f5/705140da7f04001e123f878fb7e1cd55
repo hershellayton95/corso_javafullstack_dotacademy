@@ -1,0 +1,19 @@
+package lessonPatterns;
+
+public class MySingleton {
+
+	public static Integer myNumber = null;	
+	
+//	static {
+//		myNumber = 30;
+//		//variabili statiche o di sistema e logica
+//	}
+	
+	
+	public int getMyNumber() {
+		return myNumber;
+	}
+	
+	
+	
+}

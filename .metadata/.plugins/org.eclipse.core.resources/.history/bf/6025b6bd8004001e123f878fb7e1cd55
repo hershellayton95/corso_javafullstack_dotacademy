@@ -1,0 +1,32 @@
+package lessonPatterns;
+
+public class MySingleton {
+
+	public static Integer myNumber = null;	
+	
+	private static MySingleton instance = null;
+	
+	private static Object lock = new Object();
+	
+	static {
+		myNumber = 30;
+		//variabili statiche o di sistema e logica
+	}
+	
+	
+	public Integer getMyNumber() {
+		return myNumber;
+	}
+	
+	public static MySingleton getInstance() {
+		if(instance == null) {
+			synchronized (lock) {
+				instance = new MySingleton();
+			}
+		}
+		return 
+	}
+	
+	
+	
+}

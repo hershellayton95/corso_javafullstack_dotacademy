@@ -1,0 +1,24 @@
+package lezione3.forme;
+
+public class Rettangolo {
+
+	private String x;
+	private String y;
+	
+	private String base;
+	private String height;
+
+	private boolean isVisible;
+
+	public Rettangolo(String x, String y, String base, String height, boolean isVisible) {
+		this.x = x;
+		this.y = y;
+		this.base = base;
+		this.height = height;
+		this.isVisible = isVisible;
+	}
+	
+	
+	
+	
+}

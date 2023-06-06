@@ -1,0 +1,11 @@
+package lessonPatterns;
+
+public class MyApplicationMain {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println(MySingleton.myNumber);
+		MySingleton mysingleton = new MySingleton()
+	}
+
+}

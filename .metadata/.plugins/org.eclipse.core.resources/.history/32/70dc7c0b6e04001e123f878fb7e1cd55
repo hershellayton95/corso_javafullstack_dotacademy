@@ -1,0 +1,16 @@
+package lezione3.forme;
+
+public interface IShape {
+	
+
+	public int getX();
+	public void setX();
+	public int getY();
+	public void setY();
+	public boolean isVisible();
+	public void setVisible();
+	public abstract void show();
+	public abstract void hide();
+	public void move();
+	
+}

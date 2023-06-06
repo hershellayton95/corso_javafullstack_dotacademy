@@ -1,0 +1,18 @@
+package lessonPatterns;
+
+public class MySingleton {
+
+	public static int myNumber = 10;	
+	
+	static {
+		myNumber = 30;
+	}
+	
+	
+	public int getMyNumber() {
+		return myNumber;
+	}
+	
+	
+	
+}
