@@ -1,6 +1,0 @@
-INDEX VERSION 1.132+C:\java_fullstack\.metadata\.plugins\org.eclipse.jdt.core
-3128132906.index
-1858470071.index
-4070579458.index
-1865797976.index
-2489889898.index
