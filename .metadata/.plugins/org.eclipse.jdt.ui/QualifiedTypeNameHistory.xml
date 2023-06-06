@@ -8,4 +8,10 @@
     <fullyQualifiedTypeName name="lezione3.forme.Shape"/>
     <fullyQualifiedTypeName name="lezione3.forme.Rectangle"/>
     <fullyQualifiedTypeName name="java.lang.Override"/>
+    <fullyQualifiedTypeName name="lezione3.forme.IShape"/>
+    <fullyQualifiedTypeName name="lezione3.forme.IOval"/>
+    <fullyQualifiedTypeName name="lezione3.forme.ShapesType"/>
+    <fullyQualifiedTypeName name="pattern.MySingleton"/>
+    <fullyQualifiedTypeName name="java.lang.Object"/>
+    <fullyQualifiedTypeName name="lessonPatterns.MySingleton"/>
 </qualifiedTypeNameHistroy>
