@@ -51,5 +51,10 @@ public class Rectangle extends Shape{
 	public ShapesType getType() {
 		return ShapesType.RECTANGLE;
 	}
+
+	@Override
+	public double area() {
+		return base*height;
+	}
 	
 }

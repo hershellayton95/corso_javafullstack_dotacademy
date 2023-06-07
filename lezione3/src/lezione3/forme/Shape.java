@@ -1,6 +1,6 @@
 package lezione3.forme;
 
-public abstract class Shape implements IShape{
+public abstract class Shape implements IShape, IArea{
 
 	private int x;
 	private int y;
@@ -61,4 +61,5 @@ public abstract class Shape implements IShape{
 		System.out.println(this);
 	}
 	
+	public abstract double area();
 }

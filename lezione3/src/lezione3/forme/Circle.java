@@ -47,5 +47,11 @@ public class Circle extends Shape implements IOval{
 	public ShapesType getType() {
 		return ShapesType.CIRCLE;
 	}
+
+
+	@Override
+	public double area() {
+		return Math.PI*Math.pow(radius, 2);
+	}
 	
 }

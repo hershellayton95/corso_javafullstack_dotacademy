@@ -53,5 +53,12 @@ public class Triangle extends Shape{
 	public ShapesType getType() {
 		return ShapesType.TRIANGLE;
 	}
+
+
+	@Override
+	public double area() {
+		
+		return base*height/2;
+	}
 	
 }

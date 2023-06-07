@@ -1,6 +1,7 @@
 package lezione3;
 
 import lezione3.forme.Circle;
+import lezione3.forme.IArea;
 import lezione3.forme.IOval;
 import lezione3.forme.IShape;
 import lezione3.forme.Rectangle;
@@ -177,8 +178,8 @@ public class AreaLavoro {
 		}
 		System.out.println("------------");
 		System.out.println("------------");
-		
-		
+
+
 		Shape shapes5[] = new Shape[4];
 
 		// uppercasting tipo un boxing da una forma passo a shape
@@ -189,7 +190,7 @@ public class AreaLavoro {
 
 		System.out.println("------------");
 		System.out.println("------------");
-		
+
 		for (int i = 0; i < shapes5.length; i++) {
 			System.out.println("shape[" + i + "]=" + shapes5[i]);
 			// shapes[i].move() esiste nei figli di shape e quindi non posso accedere
@@ -232,5 +233,27 @@ public class AreaLavoro {
 		}
 		System.out.println("------------");
 		System.out.println("------------");
+
+		for(int i=0; i<shapes5.length; i++) {
+			try {
+				doOval(shapes5[i]);
+
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		for(int i=0; i<shapes5.length; i++) {
+			double area =  ((IArea)shapes5[i]).area();
+			System.out.println(area);
+		}
+	}
+
+	public static void doOval(Object oval) throws Exception {
+		if(oval instanceof IOval) {
+			((IOval) oval).ovalizza();
+		} else {
+			throw new Exception("Non IOval");
+		}
 	}
 }
