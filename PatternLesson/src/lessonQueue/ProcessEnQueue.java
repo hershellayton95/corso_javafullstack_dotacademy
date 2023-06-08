@@ -2,7 +2,6 @@ package lessonQueue;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.StringTokenizer;
 
@@ -77,11 +76,11 @@ public class ProcessEnQueue extends Thread {
 
 						StringTokenizer stringTokenizer = new StringTokenizer(myLine, ",");
 
-						String name = stringTokenizer.nextToken();
-						person.setFirstname(name);
+						String firstname = stringTokenizer.nextToken();
+						person.setFirstname(firstname);
 
-						String surname = stringTokenizer.nextToken();
-						person.setLastname(surname);
+						String lastname = stringTokenizer.nextToken();
+						person.setLastname(lastname);
 
 						String age = stringTokenizer.nextToken();
 						person.setAge(Integer.parseInt(age));

@@ -7,7 +7,7 @@ import java.io.FileReader;
 public class MyApplicationMain {
 
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-
+		/*
 		//		Queue queue = new Queue();
 		//		FileReader fileReader = new FileReader(new File("resources/my_csv.csv"));
 		//		ProcessEnQueue enQueue = new ProcessEnQueue(queue, fileReader);
@@ -68,6 +68,7 @@ public class MyApplicationMain {
 		//		for(ProcessDeQueue deQueue: deQueues) {
 		//			System.out.println(deQueue.getStatus());
 		//		}
+		*/
 		Queue queue = new Queue();
 		try {
 
