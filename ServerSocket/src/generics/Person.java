@@ -44,4 +44,9 @@ public class Person {
 				+ id + "]";
 	}
 	
+	public String toJson() {
+		return "\"firstname\":\"" + firstname + "\",\"lastname:\":\"" + lastname + "\",\"age\":\"" + age + "\",\"job\":\"" + job + "\",\"id\":\"" + id + "\"";
+	}
+	
 }
+

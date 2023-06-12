@@ -20,7 +20,11 @@ public class Consultant extends Person{
 	public String toString() {
 		return "Consultant ["+ super.toString() + "computerKind=" + computerKind + "]";
 	}
-	
-	
+
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return super.toJson()+"\"computerKind\":"+"\""+computerKind+"\"";
+	}
 	
 }

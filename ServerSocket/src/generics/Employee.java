@@ -21,4 +21,10 @@ public class Employee extends Person{
 		return "Employee ["+ super.toString() + "smartphoneKind=" + smartphoneKind + "]";
 	}
 	
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return super.toJson()+"\"smartphoneKind\":"+"\""+smartphoneKind+"\"";
+	}
+	
 }
