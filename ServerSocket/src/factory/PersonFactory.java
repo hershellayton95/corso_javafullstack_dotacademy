@@ -17,7 +17,7 @@ public class PersonFactory {
 		
 		PersonConverter converter = null;
 		
-		Person p = null;
+		Person person = null;
 		
 		Map<String,InstanceType> personMap = Config.get().getInstanceTypes();
 		
@@ -27,7 +27,7 @@ public class PersonFactory {
 			String key = entry.getKey();
 			if(personValue.contains(key)) {
 				converter = (PersonConverter) Class.forName(((InstanceType) entry.getValue()).getConverterClass()).newInstance();
-				p = (Person) Class.forName(((InstanceType) entry.getValue()).getClazz()).newInstance();
+				person = (Person) Class.forName(((InstanceType) entry.getValue()).getClazz()).newInstance();
 				break;
 			}
 		}
@@ -37,7 +37,7 @@ public class PersonFactory {
 		}
 		
 		converter = converter.getInstance(personValue, converter.getClass());
-		Person person = (Person) converter.parse(personValue, p);
+		person = (Person) converter.parse(personValue, person);
 		return person;
 	}
 	
