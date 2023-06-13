@@ -56,7 +56,7 @@ public class ServiceProcess extends Thread {
 
 				String[] arrayMyInput = null;
 
-				if(myInputLine !=null)  arrayMyInput = myInputLine.split(" "); 
+				if(myInputLine !=null)  arrayMyInput = myInputLine.split(" ");
 
 				String myProtocol = "CUSTOM";
 
@@ -221,18 +221,34 @@ public class ServiceProcess extends Thread {
 			if(myLine != null) {
 
 				Person person = PersonFactory.createPerson(myLine);
-				myJsonPersons = myJsonPersons +",{"+ person.toJson()+"}";
+				
+				myJsonPersons = myJsonPersons +"{"+ person.toJson()+"},";
 			}
+			
 		}
+		myJsonPersons = myJsonPersons.substring(0, myJsonPersons.length()-1);
 		return myJsonPersons;
 	}
 
 	private void printRequest(String line, BufferedReader buffReader)
 			throws IOException {
-		while(line != null && line.length()>0) {
+		boolean isPost = false;
+		if(line != null) isPost = line.startsWith("POST");
+		int contentLength = 0;
+		
+		while(line != null && line.length()!=0){
 			System.out.println(line);
+			if(isPost && line.startsWith("Content-Length: ")) contentLength = Integer.parseInt(line.substring(("Content-Length: ").length()));
 			line = buffReader.readLine();
 		}
-
+		
+	    if(isPost){
+	        int c = 0;
+        	System.out.print("body: ");
+	        for (int i = 0; i < contentLength; i++) {
+	        	c = buffReader.read();
+	        	System.out.print((char) c);
+	        }
+	    }
 	}
 }

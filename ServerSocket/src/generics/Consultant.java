@@ -24,7 +24,7 @@ public class Consultant extends Person{
 	@Override
 	public String toJson() {
 		// TODO Auto-generated method stub
-		return super.toJson()+"\"computerKind\":"+"\""+computerKind+"\"";
+		return super.toJson()+",\"computerKind\":"+"\""+computerKind+"\"";
 	}
 	
 }
