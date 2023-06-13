@@ -2,6 +2,10 @@ package generics;
 
 public class Consultant extends Person{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String computerKind;
 	
 	public Consultant() {

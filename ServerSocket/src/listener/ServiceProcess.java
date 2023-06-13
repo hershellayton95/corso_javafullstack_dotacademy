@@ -6,10 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -19,6 +23,8 @@ import factory.ProcessDeQueue;
 import factory.ProcessEnQueue;
 import factory.Queue;
 import generics.Person;
+import serialization.CustomRequest;
+import serialization.CustomRespose;
 
 public class ServiceProcess extends Thread {
 
@@ -32,6 +38,7 @@ public class ServiceProcess extends Thread {
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -39,88 +46,189 @@ public class ServiceProcess extends Thread {
 	public void run() {
 		status = "RUNNING";
 		try {
-			while(status.equals("RUNNING")) {
+			while (status.equals("RUNNING")) {
 
 				InputStream input = socket.getInputStream();
-				InputStreamReader reader = new InputStreamReader(input);
-				BufferedReader buffReader = new BufferedReader(reader);
 
 				OutputStream output = socket.getOutputStream();
-				PrintWriter writer = new PrintWriter(output, false);
+				CustomRequest customRequest = null;
+				try {
+					ObjectInputStream inputStrem = new ObjectInputStream(input);
+					customRequest = (CustomRequest) inputStrem.readObject();
+				} catch (Exception e) {
 
-				String line = buffReader.readLine();
-				String myInputLine=line;
+				}
 
-				//print request
-				printRequest(line, buffReader);
+				if (customRequest != null) {
+					doCustomProcess(customRequest, output);
+					input.close();
+					output.close();
+				} else {
+					InputStreamReader reader = new InputStreamReader(input);
+					BufferedReader buffReader = new BufferedReader(reader);
 
-				String[] arrayMyInput = null;
+					PrintWriter writer = new PrintWriter(output, false);
 
-				if(myInputLine !=null)  arrayMyInput = myInputLine.split(" ");
+					String line = buffReader.readLine();
+					String myInputLine = line;
 
-				String myProtocol = "CUSTOM";
+					// print request
 
-				if (arrayMyInput != null &&
-						arrayMyInput.length >2 &&
-						arrayMyInput[2].contains("HTTP")) myProtocol="HTTP";
+					String[] arrayMyInput = null;
 
+					if (myInputLine != null)
+						arrayMyInput = myInputLine.split(" ");
 
-				if (myProtocol.equals("HTTP")) doHTTPProcess(arrayMyInput,writer);
-				else if  (myProtocol.equals("CUSTOM"));//doHTTPProcess();
+					String myProtocol = "CUSTOM";
 
-				//Elabora dati di input
-				//    String html = "<html><body><h1>Hello Kitty!</h1></body></html>";
-				//    String respCode = "HTTP/1.1 200 OK\r\n"
-				//      + "Content-Type: text/html\r\n\r\n" + html + "\r\n";
+					if (arrayMyInput != null && arrayMyInput.length > 1 && arrayMyInput[1].contains("HTTP"))
+						myProtocol = "HTTP";
 
+					if (myProtocol.equals("HTTP")) {
+						printRequest(line, buffReader);
+						doHTTPProcess(arrayMyInput, writer);
+					}
+					writer.close();
+					buffReader.close();
+				}
 
-				writer.close();
-				buffReader.close();
+				// Elabora dati di input
+				// String html = "<html><body><h1>Hello Kitty!</h1></body></html>";
+				// String respCode = "HTTP/1.1 200 OK\r\n"
+				// + "Content-Type: text/html\r\n\r\n" + html + "\r\n";
+
 				socket.close();
 				break;
+
 			}
-		}
-		catch(Throwable e) {
-			status= "STOPPED";
+		} catch (Throwable e) {
+			status = "STOPPED";
 			e.printStackTrace();
 		}
-		status= "STOPPED";
+		status = "STOPPED";
 	}
 
-	private void doHTTPProcess(String[] arrayMyInput, PrintWriter writer)
-			throws IOException {
-		StringTokenizer tokenizer = new StringTokenizer(arrayMyInput[1],"?");
-		String myProcessToDo =tokenizer.nextToken();
+	private void doCustomProcess(CustomRequest customRequest, OutputStream outputStream)
+			throws IOException, ClassNotFoundException {
+		// String processToDo = null;
+		// System.out.println(customRequest);
+		CustomRespose respose = new CustomRespose();
+
+		ObjectOutputStream outputStream2 = new ObjectOutputStream(outputStream);
+//		String[] param = myInputLine.split(";");
+//		processToDo = param[0];
+//		String fileName = param[1];
+//		String name = param[2];
+//		String type = param[3];
+
+		if (customRequest.getProcess().equals("getDataFile")) {
+			
+
+			try {
+				FileReader fileReader = new FileReader(new File("./resources/" + customRequest.getFileName()));
+				BufferedReader reader2 = new BufferedReader(fileReader);
+
+				// create json string
+
+				List<Person> persons = createPersons(reader2);
+				respose.setStatus("OK");
+				respose.setResult(persons);
+
+			} catch (Exception e) {
+
+				System.out.println("trovata exception");
+				respose.setStatus("KO");
+				respose.setError(e.getMessage());
+				e.printStackTrace();
+			}
+		} else if (customRequest.getProcess().equals("domyprocess")) {
+			if (customRequest.getName().equals("pippo")) {
+				respose = printQueueFromFileCustom(customRequest.getType(), outputStream2);
+			}else {
+				respose.setStatus("KO");
+				respose.setError("Il nome non è pippo");
+			}
+			
+
+		}
+
+		outputStream2.writeObject(respose);
+
+	}
+
+	private CustomRespose printQueueFromFileCustom(String processType, ObjectOutputStream outputStream) {
+		Queue queue = new Queue();
+		CustomRespose respose = new CustomRespose();
+		try {
+
+			FileReader fileReader = new FileReader(new File("./resources/my_csv.csv"));
+			ProcessEnQueue enQueue = new ProcessEnQueue(queue, fileReader);
+
+			ProcessDeQueue deQueues[] = new ProcessDeQueue[2];
+			deQueues[0] = new ProcessDeQueue(queue);
+			deQueues[1] = new ProcessDeQueue(queue);
+
+			if (processType.equals("sync"))
+				enQueue.run();
+			else if (processType.equals("async"))
+				enQueue.start();
+
+			Thread.sleep(500);
+
+			for (ProcessDeQueue deQueue : deQueues)
+				deQueue.start();
+
+			if (processType.equals("sync")) {
+				doSyncProcess(queue, enQueue, deQueues);
+
+				respose.setStatus("done");
+
+			}
+			if (processType.equals("async")) {
+				respose.setStatus("STARTED");
+				outputStream.writeObject(respose);
+
+			}
+		} catch (Exception e) {
+			System.out.println("file non trovato");
+			respose.setStatus("KO");
+			respose.setError(e.getMessage());
+			e.printStackTrace();
+		}
+		return respose;
+	}
+
+	private void doHTTPProcess(String[] arrayMyInput, PrintWriter writer) throws IOException {
+		StringTokenizer tokenizer = new StringTokenizer(arrayMyInput[0], "?");
+		String myProcessToDo = tokenizer.nextToken();
 		String arrayInputs = tokenizer.nextToken();
-		Properties params=new Properties ();
-		params.load(new StringReader (arrayInputs.replace("&", "\n")));
-		String inputName= params.getProperty("name");
-		String processType=params.getProperty("type");
-		if(myProcessToDo.equals("/getDataFile")) {
-			FileReader fileReader = new FileReader(new File("./resources/"+inputName));
+		Properties params = new Properties();
+		params.load(new StringReader(arrayInputs.replace("&", "\n")));
+		String inputName = params.getProperty("name");
+		String processType = params.getProperty("type");
+		if (myProcessToDo.equals("/getDataFile")) {
+			FileReader fileReader = new FileReader(new File("./resources/" + inputName));
 			BufferedReader reader2 = new BufferedReader(fileReader);
 
 			try {
-				String myLine = "";
-				//create json string
-				String myJsonPersons = createPersonJson(myLine, reader2);
 
+				// create json string
+				String myJsonPersons = createPersonJson(reader2);
 
-
-				String json = "["+ myJsonPersons +"]";
-				String respCode = "HTTP/1.1 200 OK\r\n"
-						+ "Content-Type: application/json\r\n\r\n" + json + "\r\n";
+				String json = "[" + myJsonPersons + "]";
+				String respCode = "HTTP/1.1 200 OK\r\n" + "Content-Type: application/json\r\n\r\n" + json + "\r\n";
 
 				writer.print(respCode);
 				writer.flush();
 
-			} catch(Exception e){
+			} catch (Exception e) {
 
 				System.out.println("trovata exception");
 				e.printStackTrace();
 			}
-		}else if(myProcessToDo.equals("/domyprocess")) {
-			if (inputName.equals("pippo")) printQueueFromFile(processType, writer);
+		} else if (myProcessToDo.equals("domyprocess")) {
+			if (inputName.equals("pippo"))
+				printQueueFromFile(processType, writer);
 		}
 
 	}
@@ -136,119 +244,151 @@ public class ServiceProcess extends Thread {
 			deQueues[0] = new ProcessDeQueue(queue);
 			deQueues[1] = new ProcessDeQueue(queue);
 
-			if(processType.equals("sync"))  enQueue.run();
-			else if(processType.equals("async")) enQueue.start();
+			if (processType.equals("sync"))
+				enQueue.run();
+			else if (processType.equals("async"))
+				enQueue.start();
 
 			Thread.sleep(500);
 
-			for(ProcessDeQueue deQueue:deQueues) deQueue.start();
+			for (ProcessDeQueue deQueue : deQueues)
+				deQueue.start();
 
-			if(processType.equals("sync")) doSyncProcess(queue, enQueue, deQueues);
+			if (processType.equals("sync"))
+				doSyncProcess(queue, enQueue, deQueues);
 
 			String json = "[{\"processStatus\":\"done\"}]";
-			if(processType.equals("async")) json="[{\"processStatus\":\"started\"}]";
+			if (processType.equals("async"))
+				json = "[{\"processStatus\":\"started\"}]";
 
-			String respCode = "HTTP/1.1 200 OK\r\n"
-					+ "Content-Type: application/json\r\n\r\n" + json + "\r\n";
-
+			String respCode = "HTTP/1.1 200 OK\r\n" + "Content-Type: application/json\r\n\r\n" + json + "\r\n";
 
 			writer.print(respCode);
 			writer.flush();
-		}catch(Exception e){
+		} catch (Exception e) {
 			System.out.println("file non trovato");
 			e.printStackTrace();
 		}
 	}
 
-	private void doSyncProcess(Queue queue, ProcessEnQueue enQueue, ProcessDeQueue[] deQueues )
+	private void doSyncProcess(Queue queue, ProcessEnQueue enQueue, ProcessDeQueue[] deQueues)
 			throws InterruptedException {
 		int retry = 0;
 		int retry1 = 0;
 		boolean stopall = false;
-		while(!stopall) {
-			if(queue.size() > 0 || enQueue.getStatus().equals("RUNNING")) Thread.sleep(3000); 
-			else if(retry > 4){
+		while (!stopall) {
+
+			if (queue.size() > 0 || enQueue.getStatus().equals("RUNNING"))
+				Thread.sleep(3000);
+			else if (retry > 4) {
 				Thread.sleep(3000);
 				retry++;
+			} else {
+				retry1 = stopDeQueue(deQueues, retry1);
+				if (retry1 > 4)
+					stopall = true;
 			}
-			else retry1 = stopDeQueue(deQueues, retry1, stopall);
-
 		}
 		Thread.sleep(5000);
-		for(ProcessDeQueue deQueue:deQueues) {
+		for (ProcessDeQueue deQueue : deQueues) {
 			System.out.println(deQueue.getStatus());
 		}
 
 	}
 
+	private int stopDeQueue(ProcessDeQueue[] deQueues, int retry1) {
+		int result = retry1;
 
-	private int stopDeQueue(ProcessDeQueue[] deQueues, int retry1, boolean stopall) {
-		int result= retry1;
-		for(ProcessDeQueue deQueue:deQueues) {
-			if(!deQueue.getStatus().equals("STOPPED")) {
+		for (ProcessDeQueue deQueue : deQueues) {
+			if (!deQueue.getStatus().equals("STOPPED")) {
 				deQueue.setStatus("TO_STOP");
 			}
 		}
 		boolean oneFail = false;
-		for(ProcessDeQueue deQueue:deQueues) {
-			if(!deQueue.getStatus().equals("STOPPED")) {
+		for (ProcessDeQueue deQueue : deQueues) {
+			if (!deQueue.getStatus().equals("STOPPED")) {
 				oneFail = true;
-			};
+			}
+			;
 		}
 
-		if(oneFail)result++;
-		if(result > 4 ) {
-			for(ProcessDeQueue deQueue:deQueues) {
+		if (oneFail)
+			result++;
+		if (result > 4) {
+			for (ProcessDeQueue deQueue : deQueues) {
 				deQueue.interrupt();
 			}
-			stopall = true;
+
 		}
 		return result;
 	}
 
-	private String createPersonJson(String myLine, BufferedReader reader2)
-			throws IOException,
-			InstantiationException,
-			IllegalAccessException,
-			ClassNotFoundException,
-			UnsupportedRecordException {
+	private List<Person> createPersons(BufferedReader reader2) throws IOException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException, UnsupportedRecordException {
 
-		String myJsonPersons = "";
-		while(myLine != null ) {
+		List<Person> persons = new ArrayList<Person>();
 
+		String myLine = reader2.readLine();
+
+		while (myLine != null && myLine.length() > 0) {
+			System.out.println(myLine);
 			myLine = reader2.readLine();
 
-			if(myLine != null) {
+			if (myLine != null) {
 
 				Person person = PersonFactory.createPerson(myLine);
-				
-				myJsonPersons = myJsonPersons +"{"+ person.toJson()+"},";
+				person.setTransientVar("pluto");
+				persons.add(person);
+
 			}
-			
+
 		}
-		myJsonPersons = myJsonPersons.substring(0, myJsonPersons.length()-1);
+
+		return persons;
+	}
+
+	private String createPersonJson(BufferedReader reader2) throws IOException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException, UnsupportedRecordException {
+
+		String myJsonPersons = "";
+		String myLine = reader2.readLine();
+
+		while (myLine != null && myLine.length() > 0) {
+			System.out.println(myLine);
+			myLine = reader2.readLine();
+
+			if (myLine != null) {
+
+				Person person = PersonFactory.createPerson(myLine);
+
+				myJsonPersons = myJsonPersons + "{" + person.toJson() + "},";
+			}
+
+		}
+		myJsonPersons = myJsonPersons.substring(0, myJsonPersons.length() - 1);
 		return myJsonPersons;
 	}
 
-	private void printRequest(String line, BufferedReader buffReader)
-			throws IOException {
+	private void printRequest(String line, BufferedReader buffReader) throws IOException {
 		boolean isPost = false;
-		if(line != null) isPost = line.startsWith("POST");
+		if (line != null)
+			isPost = line.startsWith("POST");
 		int contentLength = 0;
-		
-		while(line != null && line.length()!=0){
+
+		while (line != null && line.length() != 0) {
 			System.out.println(line);
-			if(isPost && line.startsWith("Content-Length: ")) contentLength = Integer.parseInt(line.substring(("Content-Length: ").length()));
+			if (isPost && line.startsWith("Content-Length: "))
+				contentLength = Integer.parseInt(line.substring(("Content-Length: ").length()));
 			line = buffReader.readLine();
 		}
-		
-	    if(isPost){
-	        int c = 0;
-        	System.out.print("body: ");
-	        for (int i = 0; i < contentLength; i++) {
-	        	c = buffReader.read();
-	        	System.out.print((char) c);
-	        }
-	    }
+
+		if (isPost) {
+			int c = 0;
+			System.out.print("body: ");
+			for (int i = 0; i < contentLength; i++) {
+				c = buffReader.read();
+				System.out.print((char) c);
+			}
+		}
 	}
 }

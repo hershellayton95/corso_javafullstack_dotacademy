@@ -1,13 +1,25 @@
 package generics;
 
-public class Person {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class Person implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private transient String transientVar;
 
 	private String firstname;
 	private String lastname;
 	private int age;
 	private String job;
 	private String id;
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
@@ -38,15 +50,30 @@ public class Person {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public String getTransientVar() {
+		return transientVar;
+	}
+	public void setTransientVar(String transientVar) {
+		this.transientVar = transientVar;
+	}
+
 	@Override
 	public String toString() {
-		return "Person [firstname=" + firstname + ", lastname=" + lastname + ", age=" + age + ", job=" + job + ", id="
-				+ id + "]";
+		return "Person [transientVar=" + transientVar + ", firstname=" + firstname + ", lastname=" + lastname + ", age="
+				+ age + ", job=" + job + ", id=" + id + "]";
 	}
-	
 	public String toJson() {
 		return "\"firstname\":\"" + firstname + "\",\"lastname:\":\"" + lastname + "\",\"age\":\"" + age + "\",\"job\":\"" + job + "\",\"id\":\"" + id + "\"";
 	}
-	
+
+	private void writeObject(ObjectOutputStream oos) throws IOException, ClassNotFoundException {
+		oos.defaultWriteObject();
+		oos.writeObject(this.transientVar);
+	}
+	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+		ois.defaultReadObject();
+		this.transientVar = (String) ois.readObject();
+	}
 }
 
