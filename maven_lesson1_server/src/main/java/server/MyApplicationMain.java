@@ -5,11 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import configs.Config;
 import listeners.Listener;
 
 public class MyApplicationMain {
 
+	private static final Logger log = LogManager.getLogger(MyApplicationMain.class);
+	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		
 		String configFileName = null;
@@ -26,6 +31,7 @@ public class MyApplicationMain {
 		if(configFileName == null) {
 			configFileName = "./config.properties";
 		}
+		log.debug("Config file = " + configFileName);
 		
 		file = new File(configFileName);
 		
@@ -33,7 +39,7 @@ public class MyApplicationMain {
 		try {
 			prop.load(new FileReader(file));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Failed to load " + configFileName,e);
 		}
 		
 		Config.setDefaultProp(prop);
@@ -41,6 +47,8 @@ public class MyApplicationMain {
 		Listener listener = new Listener();
 		
 		listener.start();
+		
+		log.info("Server started");
 	}
 	
 }

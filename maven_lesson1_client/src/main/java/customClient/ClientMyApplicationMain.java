@@ -11,6 +11,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import configs.Config;
 import entities.CustomRequest;
 import entities.CustomRespose;
@@ -19,7 +22,11 @@ import entities.CustomRespose;
 
 public class ClientMyApplicationMain {
 
+	private static final Logger log = LogManager.getLogger(ClientMyApplicationMain.class);
+	
 	public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException, ClassNotFoundException {
+		
+		log.info("Client started!");
 		String configFileName = null;
 		File file = null;
 
@@ -35,6 +42,8 @@ public class ClientMyApplicationMain {
 			configFileName = "./config.properties";
 		}
 
+		log.debug("Config filename = " + configFileName);
+		
 		file = new File(configFileName);
 
 		Properties prop = new Properties();
@@ -95,6 +104,7 @@ public class ClientMyApplicationMain {
 		//	printWriter.close();
 		clientSocket.close();
 
+		log.info("Client finished!");
 	}
 
 }

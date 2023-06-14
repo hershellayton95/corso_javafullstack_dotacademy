@@ -1,8 +1,15 @@
 package queues;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import entities.Person;
+import listeners.ServiceProcess;
 
 public class ProcessDeQueue extends Thread  {
+
+	private static final Logger log = LogManager.getLogger(ProcessDeQueue.class);
+	
 	private Queue queue = null;
 	private String status = "TO_RUN";
  
@@ -21,18 +28,21 @@ public class ProcessDeQueue extends Thread  {
  
 	public void run() {
 		status = "RUNNING";
+		log.debug("Status: ", status);
 		try {
 			while(status.equals("RUNNING")) {
 				Person person= queue.get();
 				if(person != null) {
-					System.out.printf("person id= %s person surname = %s \n",person.getId(), person.getLastname());
+					log.debug(person);
 				}
 			}
 		}
 		catch(InterruptedException e) {
 			status= "STOPPED";
+			log.error("An Error has occured", e);
 		}
 		status= "STOPPED";
+		log.debug("Status: ", status);
 	}
 
 }

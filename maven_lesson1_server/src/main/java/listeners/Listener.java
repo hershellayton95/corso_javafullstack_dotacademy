@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import configs.Config;
 
 public class Listener extends Thread{
 
+	private static final Logger log = LogManager.getLogger(Listener.class);
+	
 	private ServerSocket serverSocket = null;
 	private String status = "TO_RUN";
 
@@ -26,8 +31,8 @@ public class Listener extends Thread{
 	}
 	
 	public void run() {
-		System.out.println("Server started");
 		status = "RUNNING";
+		log.debug("Status is "+status);
 		try {
 			while(status.equals("RUNNING")) {
 				
@@ -41,7 +46,9 @@ public class Listener extends Thread{
 		}
 		catch(IOException e) {
 			status= "STOPPED";
+			log.error("An Error has occured", e);
 		}
 		status= "STOPPED";
+		log.debug("Status is "+status);
 	}
 }

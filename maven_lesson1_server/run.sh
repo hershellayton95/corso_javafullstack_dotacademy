@@ -1,1 +1,1 @@
-java -cp "./target/maven-lesson1-server-0.0.1-SNAPSHOT.jar" server.MyApplicationMain
+java -cp "./;./target/maven-lesson1-server-0.0.1-SNAPSHOT.jar" server.MyApplicationMain

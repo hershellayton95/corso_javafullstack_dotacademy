@@ -4,10 +4,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import entities.Person;
 import factories.PersonFactory;
+import listeners.ServiceProcess;
 
 public class ProcessEnQueue extends Thread {
+
+	private static final Logger log = LogManager.getLogger(ProcessEnQueue.class);
 
 	private Queue queue = null;
 
@@ -35,6 +41,7 @@ public class ProcessEnQueue extends Thread {
 	public void run() {
 
 		status = "RUNNING";
+		log.debug("Status: ", status);
 
 		if (inputReader instanceof FileReader) {
 
@@ -59,13 +66,12 @@ public class ProcessEnQueue extends Thread {
 
 				}
 			} catch(Exception e){
-
-				System.out.println("trovata exception");
-				e.printStackTrace();
+				log.error("Create Person Error: ", e);
 			}
 
 		}
 
 		status = "STOPPED";
+		log.debug("Status: ", status);
 	}
 }

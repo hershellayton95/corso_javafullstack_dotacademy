@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import configs.Config;
 import entities.CustomRequest;
 import entities.CustomRespose;
@@ -28,6 +31,8 @@ import queues.ProcessEnQueue;
 import queues.Queue;
 
 public class ServiceProcess extends Thread {
+
+	private static final Logger log = LogManager.getLogger(ServiceProcess.class);
 
 	private String status = "TO_RUN";
 	private Socket socket = null;
@@ -46,6 +51,7 @@ public class ServiceProcess extends Thread {
 
 	public void run() {
 		status = "RUNNING";
+		log.debug("Status is "+ status);
 		try {
 			while (status.equals("RUNNING")) {
 
@@ -57,14 +63,19 @@ public class ServiceProcess extends Thread {
 					ObjectInputStream inputStrem = new ObjectInputStream(input);
 					customRequest = (CustomRequest) inputStrem.readObject();
 				} catch (Exception e) {
-
+					log.debug("It's not a Custom process");
 				}
 
 				if (customRequest != null) {
+					log.debug("Custom Process");
+					log.trace(customRequest);
+					
 					doCustomProcess(customRequest, output);
 					input.close();
 					output.close();
+					log.debug("Input and output have closed");
 				} else {
+					log.debug("HTTP Process");
 					InputStreamReader reader = new InputStreamReader(input);
 					BufferedReader buffReader = new BufferedReader(reader);
 
@@ -72,6 +83,7 @@ public class ServiceProcess extends Thread {
 
 					String line = buffReader.readLine();
 					String myInputLine = line;
+					log.trace(myInputLine);
 
 					// print request
 
@@ -89,8 +101,13 @@ public class ServiceProcess extends Thread {
 						printRequest(line, buffReader);
 						doHTTPProcess(arrayMyInput, writer);
 					}
+					
+					log.debug("HTTP Process");
+					
 					writer.close();
 					buffReader.close();
+
+					log.debug("Write and Buffer reader have closed");
 				}
 
 				// Elabora dati di input
@@ -104,23 +121,17 @@ public class ServiceProcess extends Thread {
 			}
 		} catch (Throwable e) {
 			status = "STOPPED";
-			e.printStackTrace();
+			log.error("An Error has occured ", e);
 		}
 		status = "STOPPED";
+		log.debug("Status is "+ status);
 	}
 
 	private void doCustomProcess(CustomRequest customRequest, OutputStream outputStream)
 			throws IOException, ClassNotFoundException {
-		// String processToDo = null;
-		// System.out.println(customRequest);
 		CustomRespose respose = new CustomRespose();
 
 		ObjectOutputStream outputStream2 = new ObjectOutputStream(outputStream);
-//		String[] param = myInputLine.split(";");
-//		processToDo = param[0];
-//		String fileName = param[1];
-//		String name = param[2];
-//		String type = param[3];
 
 		if (customRequest.getProcess().equals("getDataFile")) {
 			
@@ -129,18 +140,14 @@ public class ServiceProcess extends Thread {
 				FileReader fileReader = new FileReader(new File(Config.get().getCsvPath() + customRequest.getFileName()));
 				BufferedReader reader2 = new BufferedReader(fileReader);
 
-				// create json string
-
 				List<Person> persons = createPersons(reader2);
 				respose.setStatus("OK");
 				respose.setResult(persons);
 
 			} catch (Exception e) {
-
-				System.out.println("trovata exception");
 				respose.setStatus("KO");
 				respose.setError(e.getMessage());
-				e.printStackTrace();
+				log.error("Create Person Error ", e);
 			}
 		} else if (customRequest.getProcess().equals("domyprocess")) {
 			if (customRequest.getName().equals("pippo")) {
@@ -191,10 +198,9 @@ public class ServiceProcess extends Thread {
 
 			}
 		} catch (Exception e) {
-			System.out.println("file non trovato");
 			respose.setStatus("KO");
 			respose.setError(e.getMessage());
-			e.printStackTrace();
+			log.error("File not found ", e);
 		}
 		return respose;
 	}
@@ -224,9 +230,7 @@ public class ServiceProcess extends Thread {
 				writer.flush();
 
 			} catch (Exception e) {
-
-				System.out.println("trovata exception");
-				e.printStackTrace();
+				log.error("Create Person Error ", e);
 			}
 		} else if (myProcessToDo.equals("domyprocess")) {
 			if (name.equals("pippo"))
@@ -268,8 +272,7 @@ public class ServiceProcess extends Thread {
 			writer.print(respCode);
 			writer.flush();
 		} catch (Exception e) {
-			System.out.println("file non trovato");
-			e.printStackTrace();
+			log.error("File not found ", e);
 		}
 	}
 
@@ -293,7 +296,7 @@ public class ServiceProcess extends Thread {
 		}
 		Thread.sleep(5000);
 		for (ProcessDeQueue deQueue : deQueues) {
-			System.out.println(deQueue.getStatus());
+			log.debug("DeQueue status: " + deQueue.getStatus());
 		}
 
 	}
@@ -333,7 +336,8 @@ public class ServiceProcess extends Thread {
 		String myLine = reader2.readLine();
 
 		while (myLine != null && myLine.length() > 0) {
-			System.out.println(myLine);
+
+			log.debug("myLine: " + myLine);
 			myLine = reader2.readLine();
 
 			if (myLine != null) {
@@ -356,7 +360,7 @@ public class ServiceProcess extends Thread {
 		String myLine = reader2.readLine();
 
 		while (myLine != null && myLine.length() > 0) {
-			System.out.println(myLine);
+			log.debug("myLine: " + myLine);
 			myLine = reader2.readLine();
 
 			if (myLine != null) {
@@ -372,25 +376,12 @@ public class ServiceProcess extends Thread {
 	}
 
 	private void printRequest(String line, BufferedReader buffReader) throws IOException {
-		boolean isPost = false;
-		if (line != null)
-			isPost = line.startsWith("POST");
-		int contentLength = 0;
 
 		while (line != null && line.length() != 0) {
-			System.out.println(line);
-			if (isPost && line.startsWith("Content-Length: "))
-				contentLength = Integer.parseInt(line.substring(("Content-Length: ").length()));
+			log.debug("line: " + line);
 			line = buffReader.readLine();
 		}
 
-		if (isPost) {
-			int c = 0;
-			System.out.print("body: ");
-			for (int i = 0; i < contentLength; i++) {
-				c = buffReader.read();
-				System.out.print((char) c);
-			}
-		}
+		
 	}
 }
