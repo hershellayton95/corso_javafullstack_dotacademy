@@ -64,3 +64,21 @@
 [2023-06-14 16:26:54,6680] INFO  ClientMyApplicationMain:29 - Client started!
 [2023-06-14 16:26:54,6720] DEBUG ClientMyApplicationMain:45 - Config filename = ./config.properties
 [2023-06-14 16:26:54,8410] INFO  ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:32:39,0880] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:32:39,0910] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:32:39,2690] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:33:32,5730] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:33:32,5770] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:33:32,8520] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:34:03,8230] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:34:03,8270] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:34:04,0640] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:34:39,7280] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:34:39,7310] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:34:39,8600] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:35:04,8210] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:35:04,8250] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:35:04,9550] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-15 00:35:24,6620] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-15 00:35:24,6660] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-15 00:35:24,8810] INFO  1 main ClientMyApplicationMain:107 - Client finished!
