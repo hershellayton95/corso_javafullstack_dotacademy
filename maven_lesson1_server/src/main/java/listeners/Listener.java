@@ -26,6 +26,7 @@ public class Listener extends Thread{
 	}
 	
 	public void run() {
+		System.out.println("Server started");
 		status = "RUNNING";
 		try {
 			while(status.equals("RUNNING")) {

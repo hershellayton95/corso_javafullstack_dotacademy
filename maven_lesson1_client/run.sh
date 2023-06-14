@@ -1,0 +1,1 @@
+java -cp "./target/maven-lesson1-client-0.0.1-SNAPSHOT.jar" customClient.ClientMyApplicationMain

@@ -2,10 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>maven-lessons</groupId>
-  <artifactId>maven_lesson1_common</artifactId>
+  <artifactId>maven-lesson1-common</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>maven_lesson1_common</name>
+  <name>maven-lesson1-common</name>
   <description>esempio maven project</description>
+  <packaging>jar</packaging>
   
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
