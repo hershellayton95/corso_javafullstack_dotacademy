@@ -9,6 +9,7 @@ public class Consultant extends Person{
 	private String computerKind;
 	
 	public Consultant() {
+		super();
 		super.setJob("counsultant");
 	}
 

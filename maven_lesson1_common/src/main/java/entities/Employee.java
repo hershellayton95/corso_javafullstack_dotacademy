@@ -9,6 +9,7 @@ public class Employee extends Person{
 	private String smartphoneKind;
 
 	public Employee() {
+		super();
 		super.setJob("employee");
 	}
 	

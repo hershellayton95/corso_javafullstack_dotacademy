@@ -19,7 +19,11 @@ public class Person implements Serializable {
 	private int age;
 	private String job;
 	private String id;
-
+	
+	public Person() {
+		super();
+	}
+	
 	public String getFirstname() {
 		return firstname;
 	}

@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import entities.Person;
-import listeners.ServiceProcess;
 
 public class ProcessDeQueue extends Thread  {
 
@@ -22,6 +21,7 @@ public class ProcessDeQueue extends Thread  {
 	}
  
 	public ProcessDeQueue(Queue queue){
+		super();
 		this.queue = queue;
 		status = "TO_RUN";
 	}
