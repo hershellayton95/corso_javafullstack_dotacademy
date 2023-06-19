@@ -82,3 +82,12 @@
 [2023-06-15 00:35:24,6620] INFO  1 main ClientMyApplicationMain:29 - Client started!
 [2023-06-15 00:35:24,6660] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
 [2023-06-15 00:35:24,8810] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-19 09:26:55,5120] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-19 09:26:55,5160] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-19 09:26:55,7300] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-19 09:27:35,6750] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-19 09:27:35,6790] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-19 09:27:35,8340] INFO  1 main ClientMyApplicationMain:107 - Client finished!
+[2023-06-19 09:27:51,7940] INFO  1 main ClientMyApplicationMain:29 - Client started!
+[2023-06-19 09:27:51,7980] DEBUG 1 main ClientMyApplicationMain:45 - Config filename = ./config.properties
+[2023-06-19 09:27:52,0060] INFO  1 main ClientMyApplicationMain:107 - Client finished!

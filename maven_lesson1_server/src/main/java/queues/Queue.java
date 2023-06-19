@@ -2,10 +2,16 @@ package queues;
 
 import java.util.LinkedList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import entities.Person;
 
 
 public class Queue {
+	
+	private static final Logger log = LogManager.getLogger(Queue.class);
+	
 	private  LinkedList<Person> list = new LinkedList<Person>();
 	private Object lock = new Object();
 	
@@ -18,6 +24,7 @@ public class Queue {
 	}
 	
 	public Person get() throws InterruptedException {
+		log.debug("Getting Person from Queue");
 		Person person = null;
 		if(list.size()>0) {
 			synchronized (lock) {
